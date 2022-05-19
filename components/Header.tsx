@@ -15,7 +15,10 @@ import {
   SpeakerphoneIcon,
   VideoCameraIcon,
 } from '@heroicons/react/outline'
+import { signIn, signOut, useSession } from 'next-auth/react'
 function Header() {
+  const { data: session } = useSession()
+
   return (
     <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-sm">
       <div className="relative h-10 w-20 flex-shrink-0 cursor-pointer">
@@ -56,14 +59,35 @@ function Header() {
       <div className="ml-5 flex items-center lg:hidden">
         <MenuIcon className="icon" />
       </div>
+      {session ? (
+        <div
+          className="flex cursor-pointer items-center space-x-2"
+          onClick={() => signOut()}
+        >
+          <div className="relative h-5 w-5 flex-shrink-0">
+            <Image src="https://links.papareact.com/23l" layout="fill" />
+          </div>
+          <div className='flex-1 text-xs'>
+            <p className="hidden  lg:inline-flex truncate">
+              {session?.user?.name}
+            </p>
+            <p className='text-gray-400'>69 Karma</p>
+          </div>
 
-      <div className='flex items-center space-x-2'>
-        <div className="relative h-5 w-5 flex-shrink-0">
-          <Image src="https://links.papareact.com/23l" layout="fill" />
+          <ChevronDownIcon className='text-gray-400 h-5' />
         </div>
+      ) : (
+        <div
+          className="flex cursor-pointer items-center space-x-2"
+          onClick={() => signIn()}
+        >
+          <div className="relative h-5 w-5 flex-shrink-0">
+            <Image src="https://links.papareact.com/23l" layout="fill" />
+          </div>
 
-        <p className='text-gray-400 hidden lg:inline-flex'>Sign In</p>
-      </div>
+          <p className="hidden text-gray-400 lg:inline-flex">Sign In</p>
+        </div>
+      )}
     </div>
   )
 }
