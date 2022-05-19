@@ -11,3 +11,4 @@ Following texhs were used..
 + GraphQL
 + Typescript
 + TailwindCSS
++ apollo client
