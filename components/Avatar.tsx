@@ -4,7 +4,7 @@ import React from 'react'
 
 type Props = {
   seed?: string
-  large?: string
+  large?: boolean
 }
 
 function Avatar({ seed, large }: Props) {

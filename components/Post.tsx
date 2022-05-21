@@ -20,7 +20,7 @@ function Post({ post }: { post: Post }) {
 
       <div className="p-3 pb-1">
         <div className="flex items-center space-x-2">
-          <Avatar seed={post.username} />
+          <Avatar seed={post.subreddit[0]?.topic} />
 
           <p className="text-xs text-gray-400">
             <span className="font-bold text-black hover:text-blue-400 hover:underline">

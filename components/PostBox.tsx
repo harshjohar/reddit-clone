@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
 import { ADD_POST, ADD_SUBREDDIT } from '../graphql/mutations'
 import client from '../Apollo/apollo-client'
-import { GET_SUBREDDIT_BY_TOPIC } from '../graphql/queries'
+import { GET_ALL_POSTS, GET_SUBREDDIT_BY_TOPIC } from '../graphql/queries'
 import toast from 'react-hot-toast'
 
 interface FormData {
@@ -16,10 +16,16 @@ interface FormData {
   subreddit: string
 }
 
-function PostBox() {
+type Props = {
+  subreddit?: string
+}
+
+function PostBox({ subreddit }: Props) {
   const { data: session } = useSession()
 
-  const [addPost] = useMutation(ADD_POST)
+  const [addPost] = useMutation(ADD_POST, {
+    refetchQueries: [GET_ALL_POSTS, 'getPostList'],
+  })
   const [addSubreddit] = useMutation(ADD_SUBREDDIT)
 
   const {
@@ -34,7 +40,7 @@ function PostBox() {
 
   const submitForm = handleSubmit(async (formData) => {
     console.log(formData)
-    const notification = toast.loading("Creating new Post...")
+    const notification = toast.loading('Creating new Post...')
     try {
       // query for the subreddit topic
       const {
@@ -42,7 +48,7 @@ function PostBox() {
       } = await client.query({
         query: GET_SUBREDDIT_BY_TOPIC,
         variables: {
-          topic: formData.subreddit,
+          topic: subreddit || formData.subreddit,
         },
       })
 
@@ -91,11 +97,11 @@ function PostBox() {
       setValue('postTitle', '')
       setValue('subreddit', '')
 
-      toast.success("New Post Created", {
-        id: notification
+      toast.success('New Post Created', {
+        id: notification,
       })
     } catch (error) {
-      toast.error("Something went Wrong :(")
+      toast.error('Something went Wrong :(')
     }
   })
   return (
@@ -111,7 +117,11 @@ function PostBox() {
           className="flex-1 rounded-md bg-gray-50 p-2 pl-5 outline-none"
           type="text"
           placeholder={
-            session ? `Create a Post by entering a title!` : `Sign in to post`
+            session
+              ? subreddit
+                ? `Create a post in r/${subreddit}`
+                : `Create a Post by entering a title!`
+              : `Sign in to post`
           }
         />
 
@@ -136,15 +146,17 @@ function PostBox() {
             />
           </div>
 
-          <div className="flex items-center px-2">
-            <p className="min-w-[90px]">Subreddit:</p>
-            <input
-              type="text"
-              placeholder="i.e. helloworld"
-              {...register('subreddit', { required: true })}
-              className="m-2 flex-1 bg-blue-50 p-2 outline-none"
-            />
-          </div>
+          {!subreddit && (
+            <div className="flex items-center px-2">
+              <p className="min-w-[90px]">Subreddit:</p>
+              <input
+                type="text"
+                placeholder="i.e. helloworld"
+                {...register('subreddit', { required: true })}
+                className="m-2 flex-1 bg-blue-50 p-2 outline-none"
+              />
+            </div>
+          )}
 
           {imageBoxOpen && (
             <div className="flex items-center px-2">
