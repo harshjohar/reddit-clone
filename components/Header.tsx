@@ -16,17 +16,20 @@ import {
   VideoCameraIcon,
 } from '@heroicons/react/outline'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
 function Header() {
   const { data: session } = useSession()
 
   return (
     <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-sm">
       <div className="relative h-10 w-20 flex-shrink-0 cursor-pointer">
-        <Image
-          src="https://links.papareact.com/fqy"
-          layout="fill"
-          objectFit="contain"
-        />
+        <Link href="/">
+          <Image
+            src="https://links.papareact.com/fqy"
+            layout="fill"
+            objectFit="contain"
+          />
+        </Link>
       </div>
 
       <div className="mx-7 flex items-center">
@@ -67,14 +70,14 @@ function Header() {
           <div className="relative h-5 w-5 flex-shrink-0">
             <Image src="https://links.papareact.com/23l" layout="fill" />
           </div>
-          <div className='flex-1 text-xs'>
-            <p className="hidden  lg:inline-flex truncate">
+          <div className="flex-1 text-xs">
+            <p className="hidden  truncate lg:inline-flex">
               {session?.user?.name}
             </p>
-            <p className='text-gray-400'>69 Karma</p>
+            <p className="text-gray-400">69 Karma</p>
           </div>
 
-          <ChevronDownIcon className='text-gray-400 h-5' />
+          <ChevronDownIcon className="h-5 text-gray-400" />
         </div>
       ) : (
         <div

@@ -39,7 +39,6 @@ function PostBox({ subreddit }: Props) {
   const [imageBoxOpen, setImageBoxOpen] = useState(false)
 
   const submitForm = handleSubmit(async (formData) => {
-    console.log(formData)
     const notification = toast.loading('Creating new Post...')
     try {
       // query for the subreddit topic

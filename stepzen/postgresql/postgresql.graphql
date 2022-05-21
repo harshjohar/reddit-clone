@@ -149,6 +149,15 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+
+  getPostByPostId(post_id: ID!): Post
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "post" where "post"."id"=$1
+      """
+      configuration: "postgresql_config"
+    )
 }
 
 type Mutation {
@@ -173,6 +182,14 @@ type Mutation {
     @dbquery(
       type: "postgresql"
       table: "subreddit"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
+
+  insertComment(post_id: ID!, username: String!, text: String!): Comment
+    @dbquery(
+      type: "postgresql"
+      table: "comment"
       dml: INSERT
       configuration: "postgresql_config"
     )
