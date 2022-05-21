@@ -7,13 +7,15 @@ import client from '../Apollo/apollo-client'
 import { Toaster } from 'react-hot-toast'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+  const AnyComponent = Component as any
+  
   return (
     <ApolloProvider client={client}>
       <SessionProvider session={session}>
         <Toaster />
         <div className="h-screen overflow-y-scroll bg-gray-200">
           <Header />
-          <Component {...pageProps} />
+          <AnyComponent {...pageProps} />
         </div>
       </SessionProvider>
     </ApolloProvider>
